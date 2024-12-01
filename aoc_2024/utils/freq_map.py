@@ -1,10 +1,8 @@
-from typing import Hashable, Mapping, TypeVar
-
-_T = TypeVar("_T", bound=Hashable)
+from typing import Hashable, Mapping
 
 
-def freq_map(values: list[_T]) -> Mapping[_T, int]:
-    output: dict[_T, int] = {}
+def freq_map[T: Hashable](values: list[T]) -> Mapping[T, int]:
+    output: dict[T, int] = {}
     for val in values:
         if val not in output:
             output[val] = 0
