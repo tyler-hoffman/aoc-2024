@@ -27,19 +27,19 @@ class Day02PartBSolver:
     def _is_ascending(self, report: Sequence[int]) -> bool:
         prev = report[0]
         for val in report[1:]:
-            if val < prev + 1 or val > prev + 3:
+            diff = val - prev
+            if diff not in range(1, 4):
                 return False
-            else:
-                prev = val
+            prev = val
         return True
 
     def _is_descending(self, report: Sequence[int]) -> bool:
         prev = report[0]
         for val in report[1:]:
-            if val < prev - 3 or val > prev - 1:
+            diff = prev - val
+            if diff not in range(1, 4):
                 return False
-            else:
-                prev = val
+            prev = val
         return True
 
 
