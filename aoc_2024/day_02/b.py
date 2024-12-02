@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+import itertools
 from typing import Sequence
 from aoc_2024.day_02.parser import Parser
 
@@ -13,34 +14,25 @@ class Day02PartBSolver:
         return len(safe_reports)
 
     def _is_safe(self, report: Sequence[int]) -> bool:
-        if self._is_ascending(report) or self._is_descending(report):
+        if self._is_modified_report_safe(report):
             return True
         else:
             for i in range(len(report)):
                 modified_report = [*report[:i], *report[i + 1 :]]
-                if self._is_ascending(modified_report) or self._is_descending(
-                    modified_report
-                ):
+                if self._is_modified_report_safe(modified_report):
                     return True
             return False
 
+    def _is_modified_report_safe(self, report: Sequence[int]) -> bool:
+        return self._is_ascending(report) or self._is_descending(report)
+
     def _is_ascending(self, report: Sequence[int]) -> bool:
-        prev = report[0]
-        for val in report[1:]:
-            diff = val - prev
-            if diff not in range(1, 4):
-                return False
-            prev = val
-        return True
+        pairs = itertools.pairwise(report)
+        return all(1 <= b - a <= 3 for a, b in pairs)
 
     def _is_descending(self, report: Sequence[int]) -> bool:
-        prev = report[0]
-        for val in report[1:]:
-            diff = prev - val
-            if diff not in range(1, 4):
-                return False
-            prev = val
-        return True
+        pairs = itertools.pairwise(report)
+        return all(1 <= a - b <= 3 for a, b in pairs)
 
 
 def solve(input: str) -> int:

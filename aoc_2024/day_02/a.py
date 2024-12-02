@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+import itertools
 from typing import Sequence
 from aoc_2024.day_02.parser import Parser
 
@@ -16,22 +17,12 @@ class Day02PartASolver:
         return self._is_ascending(report) or self._is_descending(report)
 
     def _is_ascending(self, report: Sequence[int]) -> bool:
-        prev = report[0]
-        for val in report[1:]:
-            diff = val - prev
-            if diff not in range(1, 4):
-                return False
-            prev = val
-        return True
+        pairs = itertools.pairwise(report)
+        return all(1 <= b - a <= 3 for a, b in pairs)
 
     def _is_descending(self, report: Sequence[int]) -> bool:
-        prev = report[0]
-        for val in report[1:]:
-            diff = prev - val
-            if diff not in range(1, 4):
-                return False
-            prev = val
-        return True
+        pairs = itertools.pairwise(report)
+        return all(1 <= a - b <= 3 for a, b in pairs)
 
 
 def solve(input: str) -> int:
