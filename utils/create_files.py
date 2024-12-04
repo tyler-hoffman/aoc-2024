@@ -6,6 +6,7 @@ import aocd
 from utils.file_data import FileData
 from utils.templates.parser import create_parser_stub
 from utils.templates.part import create_part_stub
+from utils.templates.prompt import create_prompt_stub
 from utils.templates.test_part import create_part_test_stub
 
 
@@ -24,7 +25,7 @@ def create_directories_if_needed(file_data: FileData) -> None:
         touch_file(file_data.src_init_file)
         write_file(file_data.input_file, aocd.get_data(year=2024, day=file_data.day))
         write_file(file_data.parser_file, create_parser_stub())
-        write_file(file_data.prompt_file, "")
+        write_file(file_data.prompt_file, create_prompt_stub())
 
     if not os.path.isdir(file_data.test_directory):
         os.makedirs(file_data.test_directory)

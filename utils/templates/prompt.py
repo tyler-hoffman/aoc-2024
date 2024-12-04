@@ -1,0 +1,18 @@
+def create_prompt_stub() -> str:
+    return _PROMPT_TEMPLATE
+
+
+_PLACEHOLDER = '"NOT THIS"'
+
+_PROMPT_TEMPLATE = f"""
+SAMPLE_DATA = \"\"\"
+REPLACE ME!
+\"\"\"
+
+SAMPLE_SOLUTION_A = {_PLACEHOLDER}
+SAMPLE_SOLUTION_B = {_PLACEHOLDER}
+
+SOLUTION_A = {_PLACEHOLDER}
+SOLUTION_B = {_PLACEHOLDER}
+
+"""
