@@ -9,22 +9,14 @@ def create_part_test_stub(day_string: str, part: str) -> str:
 
 
 _TEST_PART_TEMPLATE = """
-import pytest
-
 from {src}.day_{day_string}.{part} import get_solution, solve
+from {src}.day_{day_string}.from_prompt import SAMPLE_DATA, SAMPLE_SOLUTION_{part_upper}, SOLUTION_{part_upper}
 
 
-@pytest.mark.parametrize(
-    "input, expected",
-    [
-        ("INPUT", -1),
-    ],
-)
-def test_solve(input: str, expected: int):
-    assert solve(input) == expected
+def test_solve():
+    assert solve(SAMPLE_DATA) == SAMPLE_SOLUTION_{part_upper}
 
-@pytest.mark.skip
 def test_my_solution():
-    assert get_solution() == "NOT THIS"
+    assert get_solution() == SOLUTION_{part_upper}
 
 """
