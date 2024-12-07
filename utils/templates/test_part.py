@@ -16,6 +16,7 @@ from {src}.day_{day_string}.from_prompt import SAMPLE_DATA, SAMPLE_SOLUTION_{par
 def test_solve():
     assert solve(SAMPLE_DATA) == SAMPLE_SOLUTION_{part_upper}
 
+
 def test_my_solution():
     assert get_solution() == SOLUTION_{part_upper}
 
