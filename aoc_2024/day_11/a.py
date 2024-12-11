@@ -32,16 +32,6 @@ class Day11PartASolver:
         else:
             return self.compute(stone * 2024, iterations - 1)
 
-    def next_state(self, stone: int) -> list[int]:
-        as_str = str(stone)
-        if stone == 0:
-            return [1]
-        elif len(as_str) % 2 == 0:
-            half = len(as_str) // 2
-            return [int(as_str[:half]), int(as_str[half:])]
-        else:
-            return [stone * 2024]
-
     @cached_property
     def computed(self) -> dict[int, list[list[int]]]:
         return {}
