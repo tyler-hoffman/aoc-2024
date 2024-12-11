@@ -4,14 +4,14 @@ from aoc_2024.day_11.parser import Parser
 
 
 @dataclass(frozen=True)
-class Day11PartASolver:
+class Day11PartBSolver:
     input: list[int] = field(hash=False)
 
     @property
     def solution(self) -> int:
         output = 0
         for stone in self.input:
-            output += self.compute(stone, iterations=25)
+            output += self.compute(stone, iterations=75)
         return output
 
     @cache
@@ -49,7 +49,7 @@ class Day11PartASolver:
 
 def solve(input: str) -> int:
     data = Parser.parse(input)
-    solver = Day11PartASolver(data)
+    solver = Day11PartBSolver(data)
 
     return solver.solution
 
