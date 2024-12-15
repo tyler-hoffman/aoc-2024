@@ -55,11 +55,10 @@ class Day15PartBSolver:
     def shift(self, p: Point, direction: Point) -> None:
         char = self.points[p]
         if char in "[@]":
-            if direction in {LEFT, RIGHT} or char not in "[]":
+            if direction in {LEFT, RIGHT} or char == "@":
                 next = p.add(direction)
                 self.shift(next, direction)
-                self.points[next] = self.points[p]
-                self.points[p] = "."
+                self.shift_cell(p, direction)
             else:
                 if char == "[":
                     left = p
@@ -67,16 +66,17 @@ class Day15PartBSolver:
                 elif char == "]":
                     left = p.add(LEFT)
                     right = p
-                next_left = left.add(direction)
-                next_right = right.add(direction)
 
-                self.shift(next_left, direction)
-                self.shift(next_right, direction)
+                self.shift(left.add(direction), direction)
+                self.shift(right.add(direction), direction)
 
-                self.points[next_left] = self.points[left]
-                self.points[next_right] = self.points[right]
-                self.points[left] = "."
-                self.points[right] = "."
+                self.shift_cell(left, direction)
+                self.shift_cell(right, direction)
+
+    def shift_cell(self, p: Point, direction: Point) -> None:
+        next = p.add(direction)
+        self.points[next] = self.points[p]
+        self.points[p] = "."
 
     @cached_property
     def directions(self) -> list[Point]:
