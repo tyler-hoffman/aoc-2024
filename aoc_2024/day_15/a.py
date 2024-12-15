@@ -3,6 +3,11 @@ from functools import cached_property
 from aoc_2024.day_15.parser import Parser
 from aoc_2024.utils.point import Point
 
+UP = Point(0, -1)
+DOWN = Point(0, 1)
+LEFT = Point(-1, 0)
+RIGHT = Point(1, 0)
+
 
 @dataclass
 class Day15PartASolver:
@@ -40,17 +45,12 @@ class Day15PartASolver:
         return [self.instruction_to_direction(inst) for inst in self.instructions]
 
     def instruction_to_direction(self, instruction: str) -> Point:
-        match instruction:
-            case "<":
-                return Point(-1, 0)
-            case ">":
-                return Point(1, 0)
-            case "^":
-                return Point(0, -1)
-            case "v":
-                return Point(0, 1)
-            case _:
-                assert False
+        return {
+            "<": LEFT,
+            ">": RIGHT,
+            "^": UP,
+            "v": DOWN,
+        }[instruction]
 
     def gps_score(self, p: Point) -> int:
         return p.x + 100 * p.y

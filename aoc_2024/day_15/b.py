@@ -83,17 +83,12 @@ class Day15PartBSolver:
         return [self.instruction_to_direction(inst) for inst in self.instructions]
 
     def instruction_to_direction(self, instruction: str) -> Point:
-        match instruction:
-            case "<":
-                return LEFT
-            case ">":
-                return RIGHT
-            case "^":
-                return UP
-            case "v":
-                return DOWN
-            case _:
-                assert False
+        return {
+            "<": LEFT,
+            ">": RIGHT,
+            "^": UP,
+            "v": DOWN,
+        }[instruction]
 
     def gps_score(self, p: Point) -> int:
         return p.x + 100 * p.y
