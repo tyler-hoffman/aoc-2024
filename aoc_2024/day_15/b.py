@@ -59,11 +59,11 @@ class Day15PartBSolver:
                 next = p.add(direction)
                 self.shift(next, direction)
                 self.shift_cell(p, direction)
-            else:
+            elif char in "[]":
                 if char == "[":
                     left = p
                     right = p.add(RIGHT)
-                elif char == "]":
+                else:
                     left = p.add(LEFT)
                     right = p
 
