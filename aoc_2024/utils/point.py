@@ -1,13 +1,21 @@
 from __future__ import annotations
 from dataclasses import dataclass
+from functools import total_ordering
+from typing import Any
 
 
+@total_ordering
 @dataclass(frozen=True)
 class Point:
     x: int
     y: int
 
-    @property
+    def __lt__(self, other: Any) -> bool:
+        if not isinstance(other, Point):
+            return False
+        else:
+            return abs(self.x) + abs(self.y) < abs(other.x) + abs(other.y)
+
     def unit(self) -> Point:
         x = 0 if self.x == 0 else self.x // abs(self.x)
         y = 0 if self.y == 0 else self.y // abs(self.y)
