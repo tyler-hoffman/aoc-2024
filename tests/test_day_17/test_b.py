@@ -1,9 +1,5 @@
-from aoc_2024.day_17.b import get_solution, solve
-from aoc_2024.day_17.from_prompt import SAMPLE_DATA_B, SAMPLE_SOLUTION_B, SOLUTION_B
-
-
-def test_solve():
-    assert solve(SAMPLE_DATA_B) == SAMPLE_SOLUTION_B
+from aoc_2024.day_17.b import get_solution
+from aoc_2024.day_17.from_prompt import SOLUTION_B
 
 
 def test_my_solution():

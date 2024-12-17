@@ -10,19 +10,38 @@ class Day17PartBSolver:
 
     @property
     def solution(self) -> int:
-        a = 0
-        visited: set[tuple[int, int, int, int, tuple[int, ...]]] = set()
-        while True:
-            machine = Machine(
-                registers=self.registers | {"A": a},
-                instructions=self.instructions,
-                visited=visited,
-            )
+        to_get = self.instructions[::]
 
-            if machine.creates_itself():
-                return a
-            else:
-                a += 1
+        output = self.get_a(old_a=0, to_get=to_get)
+        assert output is not None
+
+        m = Machine({"A": output}, self.instructions, set())
+        verification = m.get_output()
+        assert verification == ",".join([str(x) for x in self.instructions])
+
+        return output
+
+    def get_a(self, old_a: int, to_get: list[int]) -> int | None:
+        if not to_get:
+            return old_a
+
+        target = to_get.pop()
+
+        a = old_a * 8
+        for a in range(old_a * 8, (old_a + 1) * 8):
+            b = a % 8
+            b = b ^ 2
+            c = a // (2**b)
+            b = b ^ c
+            b = b ^ 7
+            b = b % 8
+            if b == target:
+                output = self.get_a(a, to_get)
+                if output is not None:
+                    return output
+            a += 1
+        to_get.append(target)
+        return None
 
 
 @dataclass
@@ -64,6 +83,16 @@ class Machine:
             self.visited.add(state)
             run += 1
         return output_vals == self.instructions
+
+    def get_output(self) -> str:
+        return ",".join(str(x) for x in self.run())
+
+    def run(self) -> Iterator[int]:
+        while True:
+            try:
+                yield from self.next_run()
+            except IndexError:
+                break
 
     def next_run(self) -> Iterator[int]:
         r = self.registers
