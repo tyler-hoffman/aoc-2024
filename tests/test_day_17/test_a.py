@@ -11,7 +11,7 @@ from aoc_2024.day_17.from_prompt import (
     MINI_EXAMPLE_3_A,
     MINI_EXAMPLE_4_B,
     MINI_EXAMPLE_5_B,
-    SAMPLE_DATA,
+    SAMPLE_DATA_A,
     SAMPLE_SOLUTION_A,
     SOLUTION_A,
 )
@@ -50,7 +50,7 @@ def test_mini_example_5():
 
 
 def test_solve():
-    assert solve(SAMPLE_DATA) == SAMPLE_SOLUTION_A
+    assert solve(SAMPLE_DATA_A) == SAMPLE_SOLUTION_A
 
 
 def test_my_solution():
