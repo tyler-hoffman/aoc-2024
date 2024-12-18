@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from functools import cached_property
-from queue import PriorityQueue
 from aoc_2024.day_18.parser import Parser
+from aoc_2024.day_18.solver import Solver
 from aoc_2024.utils.point import Point
 
 
@@ -13,29 +13,14 @@ class Day18PartASolver:
 
     @property
     def solution(self) -> int:
-        seen: set[Point] = set()
-        queue = PriorityQueue[tuple[int, int, Point]]()
-        queue.put((0, self.start.dist(self.end), self.start))
-        while not queue.empty():
-            steps, _, pos = queue.get()
+        steps = Solver(
+            byte_positions=self.byte_positions,
+            grid_size=self.grid_size,
+            bytes_fallen=self.bytes_fallen,
+        ).min_steps
 
-            # success
-            if pos == self.end:
-                return steps
-
-            elif pos not in seen:
-                seen.add(pos)
-                for n in pos.neighbors:
-                    if all(
-                        [
-                            self.in_bounds(n),
-                            n not in seen,
-                            n not in self.corrupted_bytes,
-                        ]
-                    ):
-                        queue.put((steps + 1, n.dist(self.end), n))
-
-        assert False, "don't get here plz"
+        assert steps is not None
+        return steps
 
     def in_bounds(self, point: Point) -> bool:
         return 0 <= point.x < self.grid_size and 0 <= point.y < self.grid_size
