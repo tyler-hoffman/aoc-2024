@@ -4,33 +4,29 @@ from aoc_2024.day_19.parser import Parser
 
 
 @dataclass(frozen=True)
-class Day19PartASolver:
+class Day19PartBSolver:
     available_towels: list[str] = field(hash=False)
     desired_patterns: list[str] = field(hash=False)
 
     @property
     def solution(self) -> int:
-        return len(self.possible_patterns)
-
-    @cached_property
-    def possible_patterns(self) -> list[str]:
-        return [p for p in self.desired_patterns if self.is_possible(tuple(p))]
+        return sum(self.possibilities(tuple(p)) for p in self.desired_patterns)
 
     @cache
-    def is_possible(
+    def possibilities(
         self, pattern: tuple[str, ...], so_far: tuple[str, ...] = tuple()
-    ) -> bool:
+    ) -> int:
         if so_far == pattern:
-            return True
+            return 1
         elif len(so_far) >= len(pattern):
-            return False
+            return 0
         elif pattern[: len(so_far)] == so_far:
-            for towel in self.available_towel_patterns:
-                if self.is_possible(pattern, so_far + towel):
-                    return True
-            return False
+            return sum(
+                self.possibilities(pattern=pattern, so_far=so_far + t)
+                for t in self.available_towel_patterns
+            )
         else:
-            return False
+            return 0
 
     @cached_property
     def available_towel_patterns(self) -> list[tuple[str, ...]]:
@@ -39,7 +35,7 @@ class Day19PartASolver:
 
 def solve(input: str) -> int:
     available_towels, desired_patterns = Parser.parse(input)
-    solver = Day19PartASolver(
+    solver = Day19PartBSolver(
         available_towels=available_towels,
         desired_patterns=desired_patterns,
     )
