@@ -1,9 +1,7 @@
 from dataclasses import dataclass
 from functools import cached_property
-from queue import PriorityQueue
-from typing import Iterator
 from aoc_2024.day_20.parser import Parser
-from aoc_2024.utils.point import Point
+from aoc_2024.day_20.solver import Day20Solver
 
 
 @dataclass
@@ -13,79 +11,15 @@ class Day20PartBSolver:
 
     @property
     def solution(self) -> int:
-        return len([c for c in self.cheats if c >= self.min_seconds_to_save])
+        return self.solver.solution
 
     @cached_property
-    def cheats(self) -> Iterator[int]:
-        for p, p_dist in self.dists_to_end.items():
-            for y in range(p.y - 20, p.y + 21):
-                for x in range(p.x - 20, p.x + 21):
-                    n = Point(x, y)
-                    travelled = n.dist(p)
-                    if travelled <= 20 and n in self.non_walls:
-                        n_dist = self.dists_to_end[n]
-                        yield p_dist - n_dist - travelled
-
-    def second_neighbors(self, p: Point) -> Iterator[Point]:
-        for a in p.neighbors:
-            for b in a.neighbors:
-                yield b
-
-    @cached_property
-    def dists_to_end(self) -> dict[Point, int]:
-        output: dict[Point, int] = {}
-        visited = set[Point]()
-        queue = PriorityQueue[tuple[int, Point]]()
-
-        queue.put((0, self.end))
-        while not queue.empty():
-            dist, p = queue.get()
-            if p in visited:
-                continue
-            output[p] = dist
-            visited.add(p)
-
-            for n in p.neighbors:
-                if n not in visited and n in self.non_walls:
-                    queue.put((dist + 1, n))
-        return output
-
-    def in_bounds(self, p: Point) -> bool:
-        return 0 <= p.x < self.width and 0 <= p.y < self.height
-
-    @cached_property
-    def non_walls(self) -> set[Point]:
-        output = set[Point]()
-        for y, line in enumerate(self.grid):
-            for x, ch in enumerate(line):
-                if ch != "#":
-                    output.add(Point(x, y))
-
-        return output
-
-    @cached_property
-    def start(self) -> Point:
-        for y, line in enumerate(self.grid):
-            for x, ch in enumerate(line):
-                if ch == "S":
-                    return Point(x, y)
-        assert False
-
-    @cached_property
-    def end(self) -> Point:
-        for y, line in enumerate(self.grid):
-            for x, ch in enumerate(line):
-                if ch == "E":
-                    return Point(x, y)
-        assert False
-
-    @cached_property
-    def width(self) -> int:
-        return len(self.grid[0])
-
-    @cached_property
-    def height(self) -> int:
-        return len(self.grid)
+    def solver(self) -> Day20Solver:
+        return Day20Solver(
+            grid=self.grid,
+            min_seconds_to_save=self.min_seconds_to_save,
+            max_cheat=20,
+        )
 
 
 def solve(input: str, min_seconds_to_save: int = 100) -> int:
