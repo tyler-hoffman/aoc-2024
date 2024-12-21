@@ -18,18 +18,29 @@ class Day20Solver:
     @cached_property
     def cheats(self) -> Iterator[int]:
         for p, p_dist in self.dists_to_end.items():
-            for y in range(p.y - self.max_cheat, p.y + self.max_cheat + 1):
-                for x in range(p.x - self.max_cheat, p.x + self.max_cheat + 1):
-                    n = Point(x, y)
-                    travelled = n.dist(p)
-                    if travelled <= self.max_cheat and n in self.non_walls:
-                        n_dist = self.dists_to_end[n]
-                        yield p_dist - n_dist - travelled
+            for offset in self.offsets:
+                n = p.add(offset)
+                travelled = n.dist(p)
+                if travelled <= self.max_cheat and n in self.non_walls:
+                    n_dist = self.dists_to_end[n]
+                    yield p_dist - n_dist - travelled
 
     def second_neighbors(self, p: Point) -> Iterator[Point]:
         for a in p.neighbors:
             for b in a.neighbors:
                 yield b
+
+    @cached_property
+    def offsets(self) -> set[Point]:
+        center = Point(0, 0)
+        output = set[Point]()
+        for y in range(-self.max_cheat, self.max_cheat + 1):
+            for x in range(-self.max_cheat, self.max_cheat + 1):
+                n = Point(x, y)
+                travelled = n.dist(center)
+                if travelled <= self.max_cheat:
+                    output.add(n)
+        return output
 
     @cached_property
     def dists_to_end(self) -> dict[Point, int]:
